@@ -1,0 +1,135 @@
+:root {
+  --bs-font-sans-serif: "Montserrat";
+}
+
+body {
+  background: #f5f9fc;
+  padding: 2rem 3rem;
+}
+
+h6 {
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+.display-grid {
+  display: grid;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
+}
+
+select.form-select,
+select {
+  padding-bottom: 0.3215rem;
+  padding-top: 1rem;
+  font-size: 0.7rem;
+  color: #545454;
+}
+
+label > div {
+  padding-top: 0.3215rem;
+  padding-left: 1.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+select.form-select,
+input.form-control,
+select,
+input {
+  padding-left: 1.5rem;
+  font-size: 0.7rem;
+  height: 2.44rem;
+}
+
+.btn-primary {
+  background-image: linear-gradient(90deg, #29628d, #1a4465);
+  background-color: transparent;
+  border-color: transparent;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+.card .card-body {
+  padding: 1.5rem 2.5rem;
+}
+
+.form-check-input:checked {
+  background-color: #198754; 
+  border-color: #198754; 
+}
+
+.form-check-input:checked + .form-check-label::after {
+  background-color: #fff;
+}
+
+.form-check-input:focus:checked {
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25); 
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.bg-light {
+  background-color: #f8f9fa;
+}
+
+.btn-rounded {
+  border-radius: 20px !important;
+  background-color: #f8f9fa;
+  opacity: 1;
+}
+
+.text-success {
+  color: green;
+}
+
+.text-danger {
+  color: white !important;;
+}
+
+.bg-inactive {
+  background-color: #FF4269;
+}
+
+table thead tr th {
+  font-size: 0.8rem;
+}
+
+table tbody tr td {
+  vertical-align: middle;
+  font-size: 0.8rem;
+}
+
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-style: none;
+}
+
+table,
+table.table {
+  margin-bottom: 0;
+}
