@@ -21,7 +21,7 @@ class ApiRequest {
   static post(contoller, action, parameters = {}) {
     return this.request('POST', contoller, action, parameters);
   }
-  
+
   /**
    * Petición de tipo GET al api
    * @param {string} contoller Nombre del controlador del api sin la palabra clave Controller (Puede ser escrito en PascalCase o kebab-case)
@@ -33,20 +33,16 @@ class ApiRequest {
   static get(contoller, action, parameters = '') {
     return this.request('GET', contoller, action, parameters);
   }
-  
+
   /**
    * Método que hace peticiones al backend de GCEquipos
    * @private
-   * @param {'POST'|'GET'|'DELETE'} action Método que recibe el servicio {POST | GET}
+   * @param {'POST'|'GET'} action Método que recibe el servicio {POST | GET}
    * @param {string} controller Nombre del controlador del api sin la palabra clave Controller (Puede ser escrito en PascalCase o kebab-case)
    * @param {string} method Nombre del método del controlador del api a ejecutar (Puede ser escrito en PascalCase o kebab-case)
    * @param {Record<string, any> | string} parameters Paramétros
    * @returns {Promise<DataType<any>>} Retorno del servicio
    */
-   
-  static delete(controller, action, parameters = {}) {
-    return this.request('DELETE', controller, action, parameters);
-  } 
   static request(action, controller, method, parameters = {}) {
     return new Promise((resolve, reject) => {
       /** Ruta del servicio */
@@ -56,16 +52,6 @@ class ApiRequest {
       http.responseType = 'json';
 
       http.open(action, url);
-      
-      if (method === 'POST' || method === 'DELETE') {
-        http.setRequestHeader('Content-Type', 'application/json');
-        http.send(JSON.stringify(parameters));
-      } else if (method === 'GET') {
-        http.send();
-      } else {
-        console.error(`El método HTTP ${method} no está soportado.`);
-      }
-      
       http.onreadystatechange = () => http.readyState === 4 && (http.status === 200 ? resolve(http.response) : reject(http));
 
       if (typeof parameters === 'object') { // Peticion POST
@@ -77,7 +63,6 @@ class ApiRequest {
       } else { // Formato no permitido
         console.error(`El parámetro {parameters} recibe ${action === 'POST' ? 'un objeto' : 'una cadena de texto'}`);
       }
-
     });
   }
 

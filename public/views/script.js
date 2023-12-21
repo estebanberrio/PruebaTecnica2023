@@ -3,13 +3,7 @@ import { ApiRequest } from "../../assets/js/request.js";
 /** Clase que representa al componente computador */
 class Computador {
 
-  constructor() { }
-  
-    /** Abre la vista de edición para el computador seleccionado */
-    static openEditForm(id) {
-      // Redirige al usuario a 'edit.html' pasando el ID como parámetro
-      window.location.href = `../Prueba2023/views/edit.html?id=${id}`;
-    }
+  constructor() { }    
 
   /** Actualiza el listado de computadores en la tabla */
   static get() {
@@ -60,13 +54,17 @@ class Computador {
     }).catch(error => console.log('Ha ocurrido un error', error));
   }
   
+  /** Abre la vista de edición para el computador seleccionado */
+  static openEditForm(id) {
+    // Redirige al usuario a 'edit.html' pasando el ID como parámetro
+    window.location.href = `../Prueba2023/views/edit.html?id=${id}`;
+  }
+  
   /** Registra un computador en la base de datos */
   static add(event) {
-    event.preventDefault(); // Previene el comportamiento por defecto del formulario
-  
+    event.preventDefault(); // Previene el comportamiento por defecto del formulario  
     const registerForm = event.target;
-  
-    // Suponiendo que ApiRequest.post envía los datos y maneja la serialización correctamente
+    //agregar por method AddOne
     ApiRequest.post('Caracteristicas', 'addOne', new FormData(registerForm))
       .then(response => {
         // Aquí manejas la respuesta exitosa
@@ -80,13 +78,13 @@ class Computador {
         console.error('Error al añadir el registro:', error);
         alert('Error al agregar el computador');
       });
-  } 
-
-  /**
-   * Actualiza el estado de un computador
-   * @param {number} id Identificador del computador
-   * @param {status} boolean Nuevo estado
-   */
+  }
+  
+  /**Actualiza el estado de un computador 
+  @param {number} id Identificador del computador
+  @param {status} boolean Nuevo estado
+  */
+  
   static updateStatus = (id, status) => {
     const estado = Number(item.gce_estado) === 1 ? 'Activo' : 'Inactivo';
     const estadoColor = Number(item.gce_estado) === 1 ? 'text-success' : 'text-danger'; 
@@ -96,7 +94,7 @@ class Computador {
   /** Método para eliminar un computador */
   static deleteComputer(id) {
     if (confirm('¿Estás seguro de que quieres eliminar este computador?')) {
-      ApiRequest.delete('Caracteristicas', 'deleteOne', { gce_id: id })
+      ApiRequest.post('Caracteristicas', 'delete', { gce_id: id })
         .then(response => {
           console.log('Registro eliminado', response);
           alert('Computador eliminado con éxito');
@@ -110,7 +108,7 @@ class Computador {
   }
   
 
-}
+}//end class computer
 
 // Agrega un evento de escucha para el formulario de guardado
 document.addEventListener('DOMContentLoaded', () => {
@@ -133,7 +131,6 @@ export { Computador };
 document.addEventListener('DOMContentLoaded', () => {
   Computador.get(); // Actualiza la tabla de computadores
 });
-
 
 (function () { // Habilita el uso de las clases en el archivo HTML
   this.Computador = Computador;

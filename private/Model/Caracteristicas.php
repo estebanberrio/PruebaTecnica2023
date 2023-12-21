@@ -140,21 +140,41 @@ class Caracteristicas extends Connection
         // Verifica si el ID está establecido
         if ($this->gce_id) {
             // Prepara la declaración SQL para eliminar el registro
-            $stmt = $this->db->prepare("DELETE FROM `gc_equipos`.`gce_caracteristicas` WHERE `gce_id` = :id");
-            
+            $stmt = $this->DB->prepare("DELETE FROM `gc_equipos`.`gce_caracteristicas` WHERE `gce_id` = :id");            
             // Ejecuta con el ID
             $stmt->bindParam(':id', $this->gce_id, \PDO::PARAM_INT);
             $stmt->execute();
+            
+            print_r($stmt);
 
             // Verifica si se eliminó
             if ($stmt->rowCount() > 0) {
                 return ['success' => true, 'message' => 'Registro eliminado'];
             } else {
-                return ['success' => false, 'message' => 'No se encontró el registro con el ID proporcionado'];
+                return ['success' => false, 'message' => 'Registro No Eliminado'];
             }
+        } else {
+            return ['success' => false, 'message' => 'No fue posible ubicar el Registro por ID'];
+        }
+    }
+    
+     /** Buscar registro por el ID proporcionado */
+     public function getOne() { 
+        // Verifica si el ID está establecido
+        if ($this->gce_id) {
+            // Prepara la declaración SQL para eliminar el registro
+            $stmt = $this->DB->prepare("SELECT * FROM  `gc_equipos`.`gce_caracteristicas` WHERE `gce_id` = :id");
+            // Ejecuta con el ID
+            $stmt->bindParam(':id', $this->gce_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            
+            // Obtiene el resultado
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            print_r($result );
+            return $result;
+            
         } else {
             return ['success' => false, 'message' => 'ID no proporcionado'];
         }
     }
-
 }

@@ -30,8 +30,14 @@ class Index
                     } else {
                         $controller->{$method}();
                     }
-                } else {echo "ruta incorrecta";}
-            } else {echo "ruta incorrecta";}
+                } else {
+                    echo "Error: Método '$method' no encontrado en el controlador '$file'";
+                    http_response_code(404); 
+                }
+            }else {
+                echo "Error: Controlador '$file' no encontrado";
+                http_response_code(404);
+            }
         }
     }
 
