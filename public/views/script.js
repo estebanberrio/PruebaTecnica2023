@@ -31,7 +31,7 @@ class Computador {
           <td>${item.gce_pantalla}</td>
           <td>
           <div>
-            <span class="${estadoColor}">${estado}</span>
+          <span class="text-black">${estado}</span>
           </div>
             <div class="form-check form-switch">
               <input name = "gce_valor"  id = "${item.gce_id}" value = "${item.gce_estado}" class="form-check-input" type="checkbox" role="switch" ${Number(item.gce_estado) === 1 ? 'checked' : ''}
@@ -40,14 +40,19 @@ class Computador {
             </div>
           </td>
           <td>
-          <button class="btn btn-outline-primary btn-rounded" onclick='Computador.llenarEdicion(${JSON.stringify(
-            item.gce_id)})' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            <i class="fas fa-pencil-alt"></i>
-          </button>
-            <button class="btn btn-outline-danger btn-rounded" onclick='Computador.eliminarRegistro(${item.gce_id})'>
-             <i class="fas fa-trash-alt"></i>
+            <button class="btn btn-outline-primary btn-rounded" 
+              onclick='Computador.Edit(${JSON.stringify(item)})' 
+              data-bs-toggle="modal" 
+              data-bs-target="#staticBackdrop">
+              <i class="fas fa-pencil-alt"></i>
             </button>
-            </td>
+          </td>  
+          <td>
+            <button class="btn btn-outline-danger btn-rounded" 
+              onclick='Computador.Delete(${item.gce_id})'>
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
           </tr>          
           </td>
         </tr>`; // Añade la fila a la tabla
@@ -77,8 +82,14 @@ class Computador {
     };
 
     ApiRequest.post('Caracteristicas', 'addOne', parameters).then((response) => {
-      console.log('Añadir', response, response.data);
+      console.log('addOne', response, response.data);
+      this.get()
+      Swal.fire({
+        icon: 'success',
+        text: 'El computador ha sido registrado',
+      })
     }).catch(error => console.log('Ha ocurrido un error', error));
+    Computador.get(); // Actualiza la tabla de computadores
   };
 
   /**
@@ -90,39 +101,40 @@ class Computador {
   static updateStatus = (id, status) => {    
    
     let valorCheck =  document.getElementById(id);
-    valorCheck.value = status;
+    let estadoRow = valorCheck.closest('tr'); 
 
-    let valorCheckInsert = 0;
-    if(valorCheck.value == "true"){
-      valorCheckInsert = 1;
-
-    }else if(valorCheck.value == "false"){
-      valorCheckInsert = 0;
-    }
+    let valorCheckInsert = status ? 1 : 0;
 
     const parameters = {
       gce_valor: valorCheckInsert,
       gce_id_estado:id,
     };    
 
-    ApiRequest.post('Caracteristicas', 'updateOne',parameters).then((response) => {
-      console.log('Añadir', response, response.data);
+    ApiRequest.post('Caracteristicas', 'updateOne', parameters).then((response) => {
+      console.log('Estado actualizado', response);
+      if (status) {
+        estadoRow.classList.remove('bg-inactive');
+        estadoRow.classList.add('bg-active');
+      } else {
+        estadoRow.classList.remove('bg-active');
+        estadoRow.classList.add('bg-inactive');
+      }
     }).catch(error => console.log('Ha ocurrido un error', error));
   }
 
-  static llenarEdicion(item) {
-    document.getElementById('gce_id_actualizado').value = item.gce_id
-    document.getElementById('gce_nombre_equipo_actualizado').value = item.gce_nombre_equipo
-    document.getElementById('gce_board_actualizado').value = item.gce_board
-    document.getElementById('gce_case_actualizado').value = item.gce_case
-    document.getElementById('gce_procesador_actualizado').value = item.gce_procesador
-    document.getElementById('gce_grafica_actualizado').value = item.gce_grafica
-    document.getElementById('gce_ram_actualizado').value = item.gce_ram
-    document.getElementById('gce_disco_duro_actualizado').value = item.gce_disco_duro
-    document.getElementById('gce_teclado_actualizado').value = item.gce_teclado
-    document.getElementById('gce_mouse_actualizado').value = item.gce_mouse
-    document.getElementById('gce_pantalla_actualizado').value = item.gce_pantalla
-    document.getElementById('gce_estado_actualizado').value = item.gce_estado
+  static Edit(item) {
+    document.getElementById('gce_id_actualizado').value = item.gce_id;
+    document.getElementById('gce_nombre_equipo_actualizado').value = item.gce_nombre_equipo;
+    document.getElementById('gce_board_actualizado').value = item.gce_board;
+    document.getElementById('gce_case_actualizado').value = item.gce_case;
+    document.getElementById('gce_procesador_actualizado').value = item.gce_procesador;
+    document.getElementById('gce_grafica_actualizado').value = item.gce_grafica;
+    document.getElementById('gce_ram_actualizado').value = item.gce_ram;
+    document.getElementById('gce_disco_duro_actualizado').value = item.gce_disco_duro;
+    document.getElementById('gce_teclado_actualizado').value = item.gce_teclado;
+    document.getElementById('gce_mouse_actualizado').value = item.gce_mouse;
+    document.getElementById('gce_pantalla_actualizado').value = item.gce_pantalla;
+    document.getElementById('gce_estado_actualizado').value = item.gce_estado;
   };
   
   static Update(event) {
@@ -144,7 +156,7 @@ class Computador {
     }
 
     ApiRequest.post('Caracteristicas', 'Update', datos).then((response) => {
-      console.log('Actualizar', response)
+      console.log('Update', response)
       this.get()
       Swal.fire({
         icon: 'success',
@@ -156,8 +168,8 @@ class Computador {
 
   }
 
-  static eliminarRegistro(id) {
-    ApiRequest.post('Caracteristicas', 'eliminarRegistro', { id: id }).then((response) => {
+  static Delete(id) {
+    ApiRequest.post('Caracteristicas', 'Delete', { id: id }).then((response) => {
       console.log('Eliminado', response)
       this.get()
       Swal.fire({
@@ -168,11 +180,7 @@ class Computador {
       console.log('Ha ocurrido un error', error)
     })
   }
-
 }
-
-
-
 
 // Evento que espera a que cargue el contenido HTML 
 document.addEventListener('DOMContentLoaded', () => {
@@ -184,6 +192,3 @@ document.addEventListener('DOMContentLoaded', () => {
   this.Computador = Computador;
   this.ApiRequest = ApiRequest;
 }).apply(window);
-
-
-

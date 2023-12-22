@@ -107,7 +107,15 @@
   .text-danger {
     color: white !important;
   }
+
+  .text-black {
+    color: black;
+  }
   
+  .bg-active {
+    color: white !;
+  }
+
   .bg-inactive {
     background-color: #FF4269;
   }

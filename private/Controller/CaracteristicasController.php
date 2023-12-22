@@ -65,8 +65,8 @@ class CaracteristicasController
         echo json_encode($response);
     }
     
-    public function eliminarRegistro(){
-        $response = $this->model->eliminarRegistro($_POST['id']);
+    public function Delete(){
+        $response = $this->model->Delete($_POST['id']);
         echo json_encode($response);
     }
 }

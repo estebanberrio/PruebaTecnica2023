@@ -170,17 +170,17 @@ class Caracteristicas extends Connection
                 $this->clear();
                 return $this->get();
             } catch (\Throwable $th) {
-                return ["status" => 200, "response" => false, "message" => 'No es posible insertar el registro: ' . $th->getMessage()];
+                return ["status" => 200, "response" => false, "message" => 'No se pudo Actualizar el registro: ' . $th->getMessage()];
             }
         }
 
-        public function eliminarRegistro($id)
+        public function Delete($id)
         {
             $query = "DELETE FROM gce_caracteristicas WHERE gce_id = '{$id}'";
             try {
                 $this->DB->prepare($query)->execute();
             } catch (\Throwable $th) {
-                return ["status" => 200, "response" => false, "message" => 'No es posible insertar el registro: ' . $th->getMessage()];
+                return ["status" => 200, "response" => false, "message" => 'No se pudo eliminar el registro' . $th->getMessage()];
             }
         }
 
