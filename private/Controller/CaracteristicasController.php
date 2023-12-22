@@ -35,49 +35,38 @@ class CaracteristicasController
         $this->model->gce_mouse = isset($_POST['gce_mouse']) ? $_POST['gce_mouse'] : null;
         $this->model->gce_case = isset($_POST['gce_case']) ? $_POST['gce_case'] : null;
         $this->model->gce_ram = isset($_POST['gce_ram']) ? $_POST['gce_ram'] : null;
-
+        
+        
         $response = $this->model->save();
         echo json_encode($response);
     }
 
+    /** Trae un computador con base en su id */
     public function getOne()
     {
-        // Verifica si el ID está presente en la URL
-        $gce_id = isset($_GET['gce_id']) ? $_GET['gce_id'] : null;
-    
-        if ($gce_id) {
-            // Establece el ID en el modelo
-            $this->model->gce_id = $gce_id;
-    
-            // Obtiene la respuesta del modelo
-            $response = $this->model->getOne($gce_id);
-    
-            // Devuelve la respuesta en formato JSON
-            echo json_encode($response);
-        } else {
-            // Devuelve un error si no se proporciona el ID
-            echo json_encode(['response' => false, 'error' => 'No fue posible consultar datos']);
-        }
-        error_log(print_r($response, true));
-
-    }
-        
-    /** Elimina un registro */
-    public function delete()
-    {
-        // Verifica si el ID está presente en la URL
-        $gce_id = isset($_GET['gce_id']) ? $_GET['gce_id'] : null;
-        $response = $this->model->delete($gce_id);        
-      
+        $this->model->gce_check_update = isset($_POST['gce_ram']) ? $_POST['gce_ram'] : null;
+        $response = $this->model->get();
         echo json_encode($response);
-      
-        if ($response) {            
-            echo json_encode(['success' => true, 'message' => 'Registro eliminado']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'El registro no pudo ser eliminado']);
-        }
     }
-
     
+    public function updateOne(){
+        
+        $this->model->gce_id_estado = isset($_POST['gce_id_estado']) ? $_POST['gce_id_estado'] : null;
+        $this->model->gce_valor = isset($_POST['gce_valor']) ? $_POST['gce_valor'] : null;
 
+        
+        $response = $this->model->updateState();
+        echo json_encode($response);
+ 
+    }
+    public function Update()
+    {
+        $response = $this->model->Update(json_encode($_POST));
+        echo json_encode($response);
+    }
+    
+    public function eliminarRegistro(){
+        $response = $this->model->eliminarRegistro($_POST['id']);
+        echo json_encode($response);
+    }
 }

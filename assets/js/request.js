@@ -63,6 +63,7 @@ class ApiRequest {
       } else { // Formato no permitido
         console.error(`El parámetro {parameters} recibe ${action === 'POST' ? 'un objeto' : 'una cadena de texto'}`);
       }
+
     });
   }
 

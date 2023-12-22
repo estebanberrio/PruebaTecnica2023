@@ -8,7 +8,7 @@ use PDO;
 class Caracteristicas extends Connection
 {
 
-    public $fields = ["gce_id", "gce_nombre_equipo", "gce_board", "gce_case", "gce_procesador", "gce_grafica", "gce_ram", "gce_disco_duro", "gce_teclado", "gce_mouse", "gce_pantalla", "gce_estado", "gce_caracteristicas"];
+    public $fields = ["gce_id_estado","gce_valor","gce_id", "gce_nombre_equipo", "gce_board", "gce_case", "gce_procesador", "gce_grafica", "gce_ram", "gce_disco_duro", "gce_teclado", "gce_mouse", "gce_pantalla", "gce_estado", "gce_caracteristicas"];
 
     public $gce_nombre_equipo = null;
     public $gce_procesador = null;
@@ -22,9 +22,8 @@ class Caracteristicas extends Connection
     public $gce_case = null;
     public $gce_ram = null;
     public $gce_id = null;
-    
-    protected $db;
-
+    public $gce_id_estado = null;    
+    public $gce_valor = null;
     /** Devuelve los registros de la tabla de características */
     public function get()
     {
@@ -116,6 +115,74 @@ class Caracteristicas extends Connection
             return ["status" => 200, "response" => false, "message" => 'No es posible insertar el registro: ' . $th->getMessage()];
         }
     }
+    public function updateState(){
+        
+        $sentence = "update gce_caracteristicas set gce_estado = ? where gce_id = ?";
+        $sql = $this->DB->prepare($sentence);
+        
+        $sql->bindParam(1, $this->gce_valor, PDO::PARAM_STR, 2);
+        $sql->bindParam(2, $this->gce_id_estado, PDO::PARAM_STR, 255);
+        
+        try {
+            $sql->execute();
+            $this->clear();
+            // Devuelve el registro insertado
+            $this->gce_id = $this->DB->lastInsertId();
+            return $this->get();
+        } catch (\Throwable $th) {
+            return ["status" => 200, "response" => false, "message" => 'No es posible insertar el registro: ' . $th->getMessage()];
+        }
+        
+        }
+
+        public function Update($computer)
+        {
+            $datos = json_decode($computer, true);
+            $id = $datos['gce_id'];
+            $nombre = $datos['gce_nombre_equipo'];
+            $board = $datos['gce_board'];
+            $case = $datos['gce_case'];
+            $procesador = $datos['gce_procesador'];
+            $grafica = $datos['gce_grafica'];
+            $ram = $datos['gce_ram'];
+            $disco = $datos['gce_disco_duro'];
+            $teclado = $datos['gce_teclado'];
+            $mouse = $datos['gce_mouse'];
+            $pantalla = $datos['gce_pantalla'];
+            $estado = $datos['gce_estado'];
+    
+            $query = "UPDATE gce_caracteristicas
+                SET gce_nombre_equipo = '{$nombre}',
+                gce_board = '{$board}',
+                gce_case = '{$case}',
+                gce_procesador = '{$procesador}',
+                gce_grafica = '{$grafica}',
+                gce_ram = '{$ram}',
+                gce_disco_duro = '{$disco}',
+                gce_teclado = '{$teclado}',
+                gce_mouse = '{$mouse}',
+                gce_pantalla = '{$pantalla}',
+                gce_estado = '{$estado}'
+                WHERE gce_id = {$id}";
+    
+            try {
+                $this->DB->prepare($query)->execute();
+                $this->clear();
+                return $this->get();
+            } catch (\Throwable $th) {
+                return ["status" => 200, "response" => false, "message" => 'No es posible insertar el registro: ' . $th->getMessage()];
+            }
+        }
+
+        public function eliminarRegistro($id)
+        {
+            $query = "DELETE FROM gce_caracteristicas WHERE gce_id = '{$id}'";
+            try {
+                $this->DB->prepare($query)->execute();
+            } catch (\Throwable $th) {
+                return ["status" => 200, "response" => false, "message" => 'No es posible insertar el registro: ' . $th->getMessage()];
+            }
+        }
 
     /** Limpia los valores del modelo */
     private function clear()
@@ -133,48 +200,5 @@ class Caracteristicas extends Connection
         $this->gce_ram = null;
         $this->gce_id = null;
     }
-    
-    
-    /** Elimina un registro con el ID proporcionado */
-    public function delete() {
-        // Verifica si el ID está establecido
-        if ($this->gce_id) {
-            // Prepara la declaración SQL para eliminar el registro
-            $stmt = $this->DB->prepare("DELETE FROM `gc_equipos`.`gce_caracteristicas` WHERE `gce_id` = :id");            
-            // Ejecuta con el ID
-            $stmt->bindParam(':id', $this->gce_id, \PDO::PARAM_INT);
-            $stmt->execute();
-            
-            print_r($stmt);
 
-            // Verifica si se eliminó
-            if ($stmt->rowCount() > 0) {
-                return ['success' => true, 'message' => 'Registro eliminado'];
-            } else {
-                return ['success' => false, 'message' => 'Registro No Eliminado'];
-            }
-        } else {
-            return ['success' => false, 'message' => 'No fue posible ubicar el Registro por ID'];
-        }
-    }
-    
-     /** Buscar registro por el ID proporcionado */
-     public function getOne() { 
-        // Verifica si el ID está establecido
-        if ($this->gce_id) {
-            // Prepara la declaración SQL para eliminar el registro
-            $stmt = $this->DB->prepare("SELECT * FROM  `gc_equipos`.`gce_caracteristicas` WHERE `gce_id` = :id");
-            // Ejecuta con el ID
-            $stmt->bindParam(':id', $this->gce_id, \PDO::PARAM_INT);
-            $stmt->execute();
-            
-            // Obtiene el resultado
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            print_r($result );
-            return $result;
-            
-        } else {
-            return ['success' => false, 'message' => 'ID no proporcionado'];
-        }
-    }
 }
